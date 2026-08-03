@@ -32,49 +32,6 @@
 
 ---
 
-### 🧩 Featured Projects
-
-<table>
-  <tr>
-    <td width="50%">
-      <a href="https://github.com/noumanhafeez/Agentic-Multi-Tool-Chatbot">
-        <img src="https://github-readme-stats.vercel.app/api/pin/?username=noumanhafeez&repo=Agentic-Multi-Tool-Chatbot&theme=tokyonight" />
-      </a>
-    </td>
-    <td width="50%">
-      <a href="https://github.com/noumanhafeez/pdf-chat-assistant">
-        <img src="https://github-readme-stats.vercel.app/api/pin/?username=noumanhafeez&repo=pdf-chat-assistant&theme=tokyonight" />
-      </a>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%">
-      <a href="https://github.com/noumanhafeez/sentiment-analysis-bert">
-        <img src="https://github-readme-stats.vercel.app/api/pin/?username=noumanhafeez&repo=sentiment-analysis-bert&theme=tokyonight" />
-      </a>
-    </td>
-    <td width="50%">
-      <a href="https://github.com/noumanhafeez/production-cnn-mlops-pipeline">
-        <img src="https://github-readme-stats.vercel.app/api/pin/?username=noumanhafeez&repo=production-cnn-mlops-pipeline&theme=tokyonight" />
-      </a>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%">
-      <a href="https://github.com/noumanhafeez/production-ml-pipeline-house-prices">
-        <img src="https://github-readme-stats.vercel.app/api/pin/?username=noumanhafeez&repo=production-ml-pipeline-house-prices&theme=tokyonight" />
-      </a>
-    </td>
-    <td width="50%">
-      <a href="https://github.com/noumanhafeez/statistical-ngram-text-generator">
-        <img src="https://github-readme-stats.vercel.app/api/pin/?username=noumanhafeez&repo=statistical-ngram-text-generator&theme=tokyonight" />
-      </a>
-    </td>
-  </tr>
-</table>
-
----
-
 ### 📊 GitHub Stats
 
 <p align="center">
@@ -116,13 +73,6 @@ Your commit history rendered as a rotating isometric animation — a second self
 
 ---
 
-### 🏆 GitHub Trophies
-
-<p align="center">
-  <img src="https://github-profile-trophy.vercel.app/?username=noumanhafeez&theme=tokyonight&no-frame=true&row=1&column=6" alt="Trophies"/>
-</p>
-
----
 
 ### 🛠️ Tech Stack
 
