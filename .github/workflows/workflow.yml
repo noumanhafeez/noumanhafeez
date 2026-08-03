@@ -14,7 +14,9 @@ jobs:
   render:
     permissions:
       contents: write
+
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -22,7 +24,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "24"
 
       - name: Install ffmpeg
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
@@ -37,6 +39,17 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_USER: noumanhafeez
         run: node capture.mjs
+
+      - name: Check generated files
+        run: |
+          echo "3d-render contents:"
+          ls -la 3d-render
+
+          echo "Directories:"
+          find 3d-render -maxdepth 3 -type d -print
+
+          echo "Files:"
+          find 3d-render -maxdepth 3 -type f -print
 
       - name: Push output to "output" branch
         uses: crazy-max/ghaction-github-pages@v4
