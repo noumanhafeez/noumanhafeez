@@ -7,9 +7,9 @@
 </p>
 
 <p align="center">
-  <a href="https://www.noumanhafeez.engineer"><img src="https://img.shields.io/badge/Portfolio-2F80ED?style=for-the-badge&logo=googlechrome&logoColor=white"/></a>
+  <a href="https://noumanhafeez.engineer"><img src="https://img.shields.io/badge/Portfolio-2F80ED?style=for-the-badge&logo=googlechrome&logoColor=white"/></a>
   <a href="https://orcid.org/0009-0006-2669-4508"><img src="https://img.shields.io/badge/ORCID-A6CE39?style=for-the-badge&logo=orcid&logoColor=white"/></a>
-  <a href="https://www.linkedin.com/in/YOUR-LINKEDIN"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"/></a>
+  <a href="https://www.linkedin.com/in/nouman-hafeez"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"/></a>
   <a href="mailto:[email protected]"><img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white"/></a>
 </p>
 
@@ -28,7 +28,7 @@
 - 🛠️ Building **end-to-end production ML/DL pipelines** — from model training to deployment
 - 🤖 Exploring **agentic AI systems** with LangChain & LangGraph
 - 💬 Ask me about: RAG pipelines, BERT fine-tuning, MLOps/Docker/CI-CD
-- 📫 Reach me through my [portfolio](https://www.noumanhafeez.engineer)
+- 📫 Reach me through my [portfolio](https://noumanhafeez.engineer/)
 
 ---
 
