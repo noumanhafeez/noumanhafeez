@@ -1,0 +1,12 @@
+{
+  "name": "monster3d-render",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "capture": "node capture.mjs"
+  },
+  "dependencies": {
+    "puppeteer": "^22.0.0",
+    "serve-handler": "^6.1.5"
+  }
+}

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<style>
+  html, body { margin:0; padding:0; background: transparent; }
+  #c { display:block; }
+</style>
+</head>
+<body>
+<canvas id="c" width="900" height="300"></canvas>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from "three";
+
+const canvas = document.getElementById("c");
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, preserveDrawingBuffer: true });
+renderer.setClearColor(0x000000, 0); // fully transparent background
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.setSize(900, 300, false);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(35, 900 / 300, 0.1, 100);
+camera.position.set(0, 3.6, 9.5);
+camera.lookAt(0, 1, 0);
+
+// Lights — this is what real 3D buys you over the SVG version: genuine
+// specular highlights and a real cast shadow, not a painted-on gradient.
+const key = new THREE.DirectionalLight(0xffffff, 2.2);
+key.position.set(3, 6, 4);
+key.castShadow = true;
+key.shadow.mapSize.set(1024, 1024);
+scene.add(key);
+scene.add(new THREE.AmbientLight(0x6688ff, 0.5));
+
+// Ground: ShadowMaterial only renders the shadow itself, everything else
+// stays transparent — so the shadow blends onto GitHub's actual page background.
+const ground = new THREE.Mesh(
+  new THREE.PlaneGeometry(40, 10),
+  new THREE.ShadowMaterial({ opacity: 0.35 })
+);
+ground.rotation.x = -Math.PI / 2;
+ground.position.y = 0;
+ground.receiveShadow = true;
+scene.add(ground);
+
+// ---- Monster ----
+const monster = new THREE.Group();
+scene.add(monster);
+
+const bodyMat = new THREE.MeshStandardMaterial({ color: 0x2f80ed, roughness: 0.35, metalness: 0.1 });
+const bellyMat = new THREE.MeshStandardMaterial({ color: 0x9fe6ff, roughness: 0.5 });
+const darkMat = new THREE.MeshStandardMaterial({ color: 0x0b2545, roughness: 0.6 });
+
+const body = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 32), bodyMat);
+body.castShadow = true;
+body.position.y = 1.05;
+monster.add(body);
+
+const belly = new THREE.Mesh(new THREE.SphereGeometry(0.6, 24, 24), bellyMat);
+belly.position.set(0, 0.85, 0.75);
+belly.scale.set(1, 1, 0.5);
+monster.add(belly);
+
+for (const side of [-1, 1]) {
+  const horn = new THREE.Mesh(new THREE.ConeGeometry(0.12, 0.5, 12), darkMat);
+  horn.position.set(side * 0.4, 1.95, 0);
+  horn.rotation.z = side * 0.3;
+  horn.castShadow = true;
+  monster.add(horn);
+}
+for (const side of [-1, 1]) {
+  const spike = new THREE.Mesh(new THREE.ConeGeometry(0.1, 0.35, 8), darkMat);
+  spike.position.set(side * 0.75, 1.4, -0.6);
+  spike.rotation.x = 0.6;
+  monster.add(spike);
+}
+
+const eyeGeo = new THREE.SphereGeometry(0.16, 16, 16);
+const eyeMat = new THREE.MeshStandardMaterial({ color: 0xf5fbff, emissive: 0x224466, emissiveIntensity: 0.4 });
+const pupilMat = new THREE.MeshStandardMaterial({ color: 0x0b2545, emissive: 0x6dd5fa, emissiveIntensity: 0.6 });
+const eyes = [];
+for (const side of [-1, 1]) {
+  const eye = new THREE.Mesh(eyeGeo, eyeMat);
+  eye.position.set(side * 0.38, 1.35, 0.82);
+  monster.add(eye);
+  eyes.push(eye);
+  const pupil = new THREE.Mesh(new THREE.SphereGeometry(0.07, 12, 12), pupilMat);
+  pupil.position.set(side * 0.38, 1.35, 0.97);
+  monster.add(pupil);
+}
+
+// Jaw on a hinge group so it rotates open like a real hinge, not a scale trick
+const jawPivot = new THREE.Group();
+jawPivot.position.set(0, 0.95, 0.9);
+monster.add(jawPivot);
+const jaw = new THREE.Mesh(new THREE.SphereGeometry(0.55, 20, 20, 0, Math.PI * 2, Math.PI / 2.3, Math.PI / 2.6), darkMat);
+jaw.position.set(0, -0.15, 0.1);
+jaw.rotation.x = Math.PI;
+jawPivot.add(jaw);
+const tongue = new THREE.Mesh(new THREE.CapsuleGeometry(0.12, 0.4, 4, 8), new THREE.MeshStandardMaterial({ color: 0xff6b81 }));
+tongue.rotation.z = Math.PI / 2;
+tongue.position.set(0, -0.1, 0.5);
+tongue.scale.set(0.01, 1, 1);
+jawPivot.add(tongue);
+
+const feetMat = darkMat;
+const feet = [];
+for (const side of [-1, 1]) {
+  const foot = new THREE.Mesh(new THREE.SphereGeometry(0.3, 16, 16), feetMat);
+  foot.scale.set(1, 0.6, 1.2);
+  foot.position.set(side * 0.45, 0.15, 0.1);
+  monster.add(foot);
+  feet.push(foot);
+}
+
+// ---- Pellets: pinned repos, billboarded text sprites on rounded caps ----
+const repoNames = (window.__REPOS && window.__REPOS.length ? window.__REPOS : ["repo-one", "repo-two", "repo-three", "repo-four"]);
+const trackStart = -6, trackEnd = 6;
+const pellets = repoNames.map((name, i) => {
+  const x = repoNames.length > 1 ? trackStart + (i * (trackEnd - trackStart)) / (repoNames.length - 1) : 0;
+  const group = new THREE.Group();
+  group.position.set(x, 0.9, 0);
+
+  const cap = new THREE.Mesh(new THREE.CapsuleGeometry(0.35, 0.1, 4, 12), darkMat);
+  cap.rotation.z = Math.PI / 2;
+  group.add(cap);
+
+  const canvasEl = document.createElement("canvas");
+  canvasEl.width = 256; canvasEl.height = 64;
+  const ctx = canvasEl.getContext("2d");
+  ctx.fillStyle = "#6dd5fa";
+  ctx.font = "bold 28px monospace";
+  ctx.textAlign = "center";
+  ctx.fillText(name.length > 16 ? name.slice(0, 14) + "…" : name, 128, 42);
+  const tex = new THREE.CanvasTexture(canvasEl);
+  const label = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true }));
+  label.scale.set(1.6, 0.4, 1);
+  label.position.y = 0.55;
+  group.add(label);
+
+  scene.add(group);
+  return group;
+});
+
+// particle bursts, one pool per pellet
+const burstPools = pellets.map((p) => {
+  const group = new THREE.Group();
+  group.position.copy(p.position);
+  group.visible = false;
+  const geo = new THREE.SphereGeometry(0.05, 8, 8);
+  const mat = new THREE.MeshStandardMaterial({ color: 0x6dd5fa, emissive: 0x6dd5fa, emissiveIntensity: 1 });
+  const sparks = [];
+  for (let i = 0; i < 6; i++) {
+    const s = new THREE.Mesh(geo, mat);
+    const ang = (i / 6) * Math.PI * 2;
+    s.userData.dir = [Math.cos(ang) * 0.5, 0.6, Math.sin(ang) * 0.5];
+    group.add(s);
+    sparks.push(s);
+  }
+  scene.add(group);
+  return { group, sparks };
+});
+
+// ---- Deterministic animation: given time t (seconds, 0..DURATION), set full pose ----
+const DURATION = 12;
+const stops = repoNames.map((_, i) => {
+  const seg = 90 / (repoNames.length + 1);
+  return 3 + seg * (i + 1); // percent of DURATION when monster arrives at pellet i
+});
+
+function ease(t) { return t < 0 ? 0 : t > 1 ? 1 : t * t * (3 - 2 * t); }
+
+window.__setFrame = function (t) {
+  const pct = (t / DURATION) * 100;
+
+  // find which segment we're in -> current x target and hop phase
+  const xs = [0, ...pellets.map((p) => p.position.x)];
+  const allPct = [0, ...stops];
+  let segIndex = 0;
+  for (let i = 0; i < allPct.length - 1; i++) {
+    if (pct >= allPct[i]) segIndex = i;
+  }
+  const segStartPct = allPct[segIndex];
+  const segEndPct = allPct[segIndex + 1] ?? 100;
+  const segStartX = xs[segIndex] ?? xs[xs.length - 1];
+  const segEndX = xs[segIndex + 1] ?? (trackEnd + 2);
+  const localT = ease(Math.min(Math.max((pct - segStartPct) / Math.max(segEndPct - segStartPct, 0.001), 0), 1));
+  const x = segStartX + (segEndX - segStartX) * localT;
+  monster.position.x = x;
+
+  // hop bounce, continuous fast cycle for "life"
+  const hopT = (t % 0.8) / 0.8;
+  const hopHeight = Math.sin(hopT * Math.PI);
+  monster.position.y = hopHeight * 0.5;
+  const squash = 1 + (hopT > 0.85 ? (1 - (1 - hopT) / 0.15) * 0.2 : 0);
+  monster.scale.set(1 / Math.sqrt(1 + hopHeight * 0.3), 1 + hopHeight * 0.3, 1 / Math.sqrt(1 + hopHeight * 0.3));
+
+  // jaw chomp, continuous
+  const chompT = (t % 0.8) / 0.8;
+  jawPivot.rotation.x = chompT > 0.5 && chompT < 0.85 ? Math.sin(((chompT - 0.5) / 0.35) * Math.PI) * 0.6 : 0;
+  const tongueOut = chompT > 0.6 && chompT < 0.75 ? 1 : 0;
+  tongue.scale.x = tongueOut;
+
+  // blink
+  const blinkT = t % 3.4;
+  const blink = blinkT > 3.1 && blinkT < 3.25 ? 0.1 : 1;
+  eyes.forEach((e) => e.scale.set(1, blink, 1));
+
+  // pellets: visible until eaten, then gone; bursts fire right at eat moment
+  pellets.forEach((p, i) => {
+    const eatenAtPct = stops[i];
+    const eaten = pct > eatenAtPct + 1.5;
+    p.visible = !eaten || pct > 96;
+    if (!eaten || pct > 96) p.scale.setScalar(1);
+
+    const burst = burstPools[i];
+    const sinceEat = pct - eatenAtPct;
+    if (sinceEat > 0 && sinceEat < 4 && pct < 96) {
+      burst.group.visible = true;
+      const bt = sinceEat / 4;
+      burst.sparks.forEach((s) => {
+        s.position.set(s.userData.dir[0] * bt * 2, s.userData.dir[1] * bt * 2, s.userData.dir[2] * bt * 2);
+        s.material.opacity = 1 - bt;
+        s.material.transparent = true;
+      });
+    } else {
+      burst.group.visible = false;
+    }
+  });
+
+  renderer.render(scene, camera);
+};
+
+window.__setFrame(0);
+window.__READY = true;
+</script>
+</body>
+</html>
