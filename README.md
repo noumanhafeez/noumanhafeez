@@ -1,5 +1,6 @@
-<h1 align="center">Hi 👋, I'm Nouman Hafeez</h1>
-<h3 align="center">MSCS Candidate @ FAST NUCES, Lahore | AI / ML / Deep Learning / MLOps Engineer</h3>
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:2F80ED,100:6DD5FA&height=200&section=header&text=Nouman%20Hafeez&fontSize=42&fontColor=ffffff&animation=fadeIn&fontAlignY=35&desc=MSCS%20Candidate%20%7C%20AI%2FML%2FDL%2FMLOps%20Engineer&descAlignY=55&descSize=18"/>
+</p>
 
 <p align="center">
   <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=22&pause=1000&color=2F80ED&center=true&vCenter=true&width=600&lines=Building+production-ready+ML%2FDL+pipelines;LangChain+%7C+LangGraph+%7C+RAG+%7C+NLP;Docker+%7C+MLOps+%7C+FastAPI;Always+learning%2C+always+shipping." alt="Typing SVG" />
@@ -101,7 +102,17 @@ This animates your contribution graph as a snake eating your commit squares — 
   <img src="https://raw.githubusercontent.com/noumanhafeez/noumanhafeez/output/github-contribution-grid-snake.svg" alt="Snake animation"/>
 </p>
 
-*(Setup steps for this are below — you need to add one workflow file.)*
+---
+
+### 🧊 3D Contribution Graph
+
+Your commit history rendered as a rotating isometric animation — a second self-hosted animation, no Vercel dependency.
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/noumanhafeez/noumanhafeez/main/profile-3d-contrib/profile-night-rainbow.svg" alt="3D contribution graph"/>
+</p>
+
+*(Setup steps for both animations are below — each needs one workflow file added once.)*
 
 ---
 
@@ -139,3 +150,5 @@ This animates your contribution graph as a snake eating your commit squares — 
 <p align="center">
   <i>⭐️ Thanks for stopping by! Feel free to explore my repos and connect.</i>
 </p>
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:6DD5FA,100:2F80ED&height=100&section=footer"/>
